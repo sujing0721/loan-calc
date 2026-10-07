@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loan Calculator — Mortgage, Auto &amp; Personal Monthly Payments · LoanCompass</title>
+<meta name="description" content="Free loan calculator for mortgages, car loans and personal loans. See your monthly payment, total interest and payoff schedule instantly, with property tax, insurance and PMI included for mortgages.">
+<meta property="og:title" content="Loan Calculator — Mortgage, Auto &amp; Personal">
+<meta property="og:description" content="Monthly payment, total interest and an amortization schedule for any loan — one page, no signup.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-V0QJ3PMN8P');
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-V0QJ3PMN8P"></script>
+<style>
+  :root{
+    --ink:#0E1A24;
+    --ink-soft:#3C4C58;
+    --paper:#FFFFFF;
+    --bg:#F1F4F9;
+    --brand:#1D5BD6;
+    --brand-dark:#164AAE;
+    --brand-tint:#E3ECFB;
+    --accent:#C9A227;
+    --line:#D8DFE8;
+    --radius:16px;
+    --maxw:1080px;
+    --shadow:0 24px 48px -28px rgba(14,26,36,.35);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:.01ms !important; transition-duration:.01ms !important;}
+  }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif; line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:'Fraunces',serif; margin:0; letter-spacing:-.01em; line-height:1.15;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:var(--brand);}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px;}
+
+  /* nav */
+  header.nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(255,255,255,.9); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:var(--maxw); margin:0 auto; padding:14px 24px;
+    display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+  }
+  .brand{display:flex; align-items:center; gap:10px; font-family:'Fraunces',serif; font-weight:800; font-size:1.2rem; color:var(--ink); text-decoration:none;}
+  .brand .mark{width:30px; height:30px; border-radius:9px; background:var(--brand); color:#fff; display:grid; place-items:center; font-family:'JetBrains Mono'; font-weight:700; font-size:.95rem;}
+  nav.pills{display:flex; gap:6px; flex-wrap:wrap;}
+  nav.pills a{
+    font-size:.86rem; font-weight:600; text-decoration:none; color:var(--ink-soft);
+    padding:7px 13px; border-radius:20px; border:1.5px solid transparent; transition:.16s ease;
+  }
+  nav.pills a:hover{color:var(--brand); background:var(--brand-tint);}
+
+  /* hero */
+  .hero{padding:48px 24px 20px; max-width:var(--maxw); margin:0 auto; text-align:center;}
+  .hero .eyebrow{font-size:.82rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--brand);}
+  .hero h1{font-size:clamp(2rem,4.6vw,3.1rem); margin:12px auto 14px; max-width:20ch;}
+  .hero h1 em{font-style:normal; color:var(--brand);}
+  .hero p{color:var(--ink-soft); font-size:1.08rem; max-width:60ch; margin:0 auto;}
+
+  /* tabs */
+  .tabs{display:flex; justify-content:center; gap:8px; margin:26px 0 0; flex-wrap:wrap;}
+  .tab{
+    font-family:'Inter'; font-size:.92rem; font-weight:600; cursor:pointer;
+    padding:10px 20px; border-radius:24px; border:1.5px solid var(--line); background:#fff; color:var(--ink-soft); transition:.15s ease;
+  }
+  .tab:hover{border-color:var(--brand); color:var(--brand);}
+  .tab.active{background:var(--brand); border-color:var(--brand); color:#fff; box-shadow:0 10px 20px -10px rgba(29,91,214,.55);}
+
+  /* calculator */
+  .calc{max-width:var(--maxw); margin:26px auto 8px; padding:0 24px;}
+  .calc-shell{
+    background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow); overflow:hidden;
+    display:grid; grid-template-columns:0.95fr 1.05fr;
+  }
+  .calc-inputs{padding:28px 26px;}
+  .calc-inputs h2{font-size:1.15rem; margin-bottom:16px;}
+  .field{margin-bottom:16px;}
+  .field label{display:block; font-size:.85rem; font-weight:600; margin-bottom:6px; color:var(--ink);}
+  .field .hint{font-weight:400; color:var(--ink-soft); font-size:.78rem;}
+  .money{position:relative;}
+  .money .prefix{position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--ink-soft); font-family:'JetBrains Mono'; pointer-events:none;}
+  .money .suffix{position:absolute; right:12px; top:50%; transform:translateY(-50%); color:var(--ink-soft); font-family:'JetBrains Mono'; pointer-events:none;}
+  input, select{
+    width:100%; padding:11px 12px; border-radius:10px; border:1.5px solid var(--line);
+    font-family:'Inter'; font-size:1rem; color:var(--ink); background:#fff; transition:.15s ease;
+  }
+  input.money-input{padding-left:28px; font-family:'JetBrains Mono';}
+  input.money-input.has-suffix{padding-left:12px; padding-right:30px;}
+  input:focus, select:focus{outline:none; border-color:var(--brand); box-shadow:0 0 0 3px var(--brand-tint);}
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .chips{display:flex; flex-wrap:wrap; gap:7px; margin-top:4px;}
+  .chip{
+    font-family:'JetBrains Mono'; font-size:.8rem; font-weight:600; cursor:pointer;
+    padding:6px 11px; border-radius:20px; border:1.5px solid var(--line); background:#fff; color:var(--ink-soft); transition:.14s ease;
+  }
+  .chip:hover{border-color:var(--brand); color:var(--brand);}
+  .adv-note{font-size:.78rem; color:var(--ink-soft); background:var(--brand-tint); border-radius:10px; padding:10px 12px; margin-bottom:14px;}
+
+  .calc-results{padding:28px 26px; background:var(--ink); color:#fff;}
+  .calc-results .rhead{font-size:.82rem; letter-spacing:.06em; text-transform:uppercase; color:#8FAAD8; margin-bottom:6px;}
+  .big-num{font-family:'Fraunces'; font-weight:800; font-size:clamp(2.4rem,6vw,3.4rem); color:#fff; line-height:1;}
+  .big-num .per{font-size:1rem; font-family:'Inter'; font-weight:500; color:#A9BEE0; margin-left:6px;}
+  .result-grid{display:grid; grid-template-columns:1fr 1fr; gap:1px; margin-top:22px; background:rgba(255,255,255,.12); border-radius:12px; overflow:hidden;}
+  .result-cell{background:var(--ink); padding:14px 16px;}
+  .result-cell .k{font-size:.78rem; color:#A9BEE0;}
+  .result-cell .v{font-family:'JetBrains Mono'; font-weight:700; font-size:1.15rem; margin-top:3px;}
+  .break-box{margin-top:20px; border-top:1px solid rgba(255,255,255,.14); padding-top:16px;}
+  .break-box .rhead{color:#D8C276;}
+  .tax-line{display:flex; justify-content:space-between; font-size:.9rem; padding:5px 0; color:#CDD8E8;}
+  .tax-line .neg{color:#9FB4D8;}
+  .break-total{border-top:1px solid rgba(255,255,255,.14); margin-top:6px; padding-top:10px; color:#fff; font-family:'JetBrains Mono'; font-weight:700;}
+  .disc{font-size:.76rem; color:#8AA0C0; margin-top:12px; line-height:1.45;}
+
+  /* ad slots */
+  .adslot{max-width:var(--maxw); margin:0 auto 36px; padding:0 24px;}
+  .adslot .inner{background:var(--paper); border:1px dashed var(--line); border-radius:var(--radius); min-height:96px; display:grid; place-items:center; color:var(--ink-soft); font-size:.8rem;}
+
+  /* sections */
+  section.block{max-width:var(--maxw); margin:0 auto 44px; padding:0 24px;}
+  .panel{background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:28px 26px;}
+  .panel > h2{font-size:1.4rem; margin-bottom:6px;}
+  .panel .lead{color:var(--ink-soft); margin:0 0 20px; max-width:64ch;}
+
+  table.ref{width:100%; border-collapse:collapse; font-family:'JetBrains Mono'; font-size:.95rem;}
+  table.ref th, table.ref td{padding:11px 12px; text-align:right; border-bottom:1px solid var(--line);}
+  table.ref th:first-child, table.ref td:first-child{text-align:left;}
+  table.ref thead th{background:var(--brand-tint); color:var(--brand-dark); font-family:'Inter'; font-size:.8rem; letter-spacing:.04em; text-transform:uppercase; position:sticky; top:57px;}
+  table.ref tbody tr:hover{background:#f6f9fe;}
+  table.ref tr.hl{background:var(--brand-tint); font-weight:700;}
+  .table-scroll{overflow-x:auto; border-radius:12px; border:1px solid var(--line);}
+
+  /* faq */
+  .faq details{border-bottom:1px solid var(--line); padding:4px 0;}
+  .faq summary{cursor:pointer; font-weight:600; font-size:1rem; padding:12px 0; list-style:none; position:relative; color:var(--ink);}
+  .faq summary::-webkit-details-marker{display:none;}
+  .faq summary::after{content:"+"; position:absolute; right:2px; top:10px; font-size:1.3rem; color:var(--brand); transition:.15s;}
+  .faq details[open] summary::after{content:"–";}
+  .faq .a{padding:0 0 14px; color:var(--ink-soft); font-size:.95rem; max-width:70ch;}
+
+  footer{text-align:center; padding:40px 24px 60px; color:var(--ink-soft); font-size:.82rem;}
+  footer a{color:var(--brand); text-decoration:underline; margin:0 8px;}
+
+  @media (max-width:860px){
+    .calc-shell{grid-template-columns:1fr;}
+    nav.pills{display:none;}
+    table.ref thead th{position:static;}
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html"><span class="mark">%</span>LoanCompass</a>
+    <nav class="pills">
+      <a href="#calculator">Calculator</a>
+      <a href="#compare">Term Comparison</a>
+      <a href="#schedule">Amortization</a>
+      <a href="#how">How It Works</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="eyebrow">Free · No signup · US rates &amp; maths</div>
+  <h1>Know the <em>real monthly payment</em> before you sign</h1>
+  <p>Switch between mortgage, auto and personal loans, adjust one slider-free set of boxes, and see your payment, total interest and payoff schedule update live — with taxes, insurance and PMI baked into the mortgage number.</p>
+  <div class="tabs" role="tablist">
+    <button class="tab active" type="button" data-scenario="mortgage">Mortgage</button>
+    <button class="tab" type="button" data-scenario="auto">Auto Loan</button>
+    <button class="tab" type="button" data-scenario="personal">Personal Loan</button>
+  </div>
+</section>
+
+<div class="calc" id="calculator">
+  <div class="calc-shell">
+    <div class="calc-inputs">
+      <h2 id="inputTitle">Your home loan</h2>
+
+      <!-- shared: principal -->
+      <div class="field">
+        <label id="principalLabel" for="principal">Home price</label>
+        <div class="money"><span class="prefix">$</span><input class="money-input" type="number" id="principal" value="350000" min="0" step="1000"></div>
+      </div>
+
+      <!-- down payment (mortgage + auto) -->
+      <div class="field" id="downField">
+        <label for="down">Down payment <span class="hint" id="downPctHint">(20%)</span></label>
+        <div class="money"><span class="prefix">$</span><input class="money-input" type="number" id="down" value="70000" min="0" step="1000"></div>
+        <div class="chips" id="downChips">
+          <button class="chip" type="button" data-pct="5">5%</button>
+          <button class="chip" type="button" data-pct="10">10%</button>
+          <button class="chip" type="button" data-pct="15">15%</button>
+          <button class="chip" type="button" data-pct="20">20%</button>
+        </div>
+      </div>
+
+      <!-- auto-only: sales tax -->
+      <div class="field" id="salesTaxField" style="display:none;">
+        <label for="salesTax">Sales tax <span class="hint">on the car, %</span></label>
+        <div class="money"><input class="money-input has-suffix" type="number" id="salesTax" value="7" min="0" max="15" step="0.1"><span class="suffix">%</span></div>
+      </div>
+
+      <!-- mortgage-only extras -->
+      <div id="mortgageExtras">
+        <div class="row2">
+          <div class="field">
+            <label for="taxAnnual">Property tax <span class="hint">$/yr</span></label>
+            <div class="money"><span class="prefix">$</span><input class="money-input" type="number" id="taxAnnual" value="4200" min="0" step="100"></div>
+          </div>
+          <div class="field">
+            <label for="insAnnual">Home insurance <span class="hint">$/yr</span></label>
+            <div class="money"><span class="prefix">$</span><input class="money-input" type="number" id="insAnnual" value="1800" min="0" step="50"></div>
+          </div>
+        </div>
+        <div class="field" id="pmiField">
+          <label for="pmiRate">PMI rate <span class="hint">% of loan / yr — applies when down is under 20%</span></label>
+          <div class="money"><input class="money-input has-suffix" type="number" id="pmiRate" value="0.5" min="0" max="2" step="0.05"><span class="suffix">%</span></div>
+        </div>
+      </div>
+
+      <!-- auto-only: trade-in -->
+      <div class="field" id="tradeField" style="display:none;">
+        <label for="tradein">Trade-in value <span class="hint">(optional)</span></label>
+        <div class="money"><span class="prefix">$</span><input class="money-input" type="number" id="tradein" value="0" min="0" step="500"></div>
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label for="rate">Interest rate <span class="hint">APR %</span></label>
+          <div class="money"><input class="money-input has-suffix" type="number" id="rate" value="6.8" min="0" max="30" step="0.05"><span class="suffix">%</span></div>
+        </div>
+        <div class="field">
+          <label for="term" id="termLabel">Loan term <span class="hint">years</span></label>
+          <input type="number" id="term" value="30" min="1" step="1">
+        </div>
+      </div>
+      <div class="chips" id="termChips"></div>
+    </div>
+
+    <div class="calc-results">
+      <div class="rhead" id="payHead">Monthly payment (P&amp;I + escrow)</div>
+      <div class="big-num"><span id="monthly">$0</span><span class="per">/ month</span></div>
+      <div class="result-grid">
+        <div class="result-cell"><div class="k">Loan amount</div><div class="v" id="loanAmt">$0</div></div>
+        <div class="result-cell"><div class="k">Total interest</div><div class="v" id="totInt">$0</div></div>
+        <div class="result-cell"><div class="k">Total repaid</div><div class="v" id="totPaid">$0</div></div>
+        <div class="result-cell"><div class="k">Payoff</div><div class="v" id="payoff">—</div></div>
+      </div>
+
+      <div class="break-box" id="mortgageBreak">
+        <div class="rhead">Mortgage payment breakdown</div>
+        <div class="tax-line"><span>Principal &amp; interest</span><span id="bPi">$0</span></div>
+        <div class="tax-line"><span>Property tax</span><span class="neg" id="bTax">$0</span></div>
+        <div class="tax-line"><span>Homeowners insurance</span><span class="neg" id="bIns">$0</span></div>
+        <div class="tax-line"><span>PMI <span id="pmiNote" style="opacity:.75;"></span></span><span class="neg" id="bPmi">$0</span></div>
+        <div class="tax-line break-total"><span>Total monthly (PITI)</span><span id="bTotal">$0</span></div>
+        <p class="disc">PMI is charged when your down payment is under 20% of the home price and drops off once you reach 20% equity — real lenders' PMI rates vary by credit score, typically 0.3%–1.2% of the loan per year.</p>
+      </div>
+
+      <p class="disc" id="genericDisc">Estimates use standard amortization math. Your lender's actual payment can differ with fees, escrow changes or how interest compounds — treat this as a planning tool, not a quote.</p>
+    </div>
+  </div>
+</div>
+
+<!-- AD SLOT 1 — after AdSense approval paste: <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXX" data-ad-slot="XXXX" data-ad-format="auto" data-full-width-responsive="true"></ins> + init script inside .inner -->
+<div class="adslot"><div class="inner" style="display:none;"></div></div>
+
+<!-- Term comparison -->
+<section class="block" id="compare">
+  <div class="panel">
+    <h2>Compare loan terms</h2>
+    <p class="lead" id="compareLead">Same loan, same rate — different term lengths. A shorter term usually means a higher monthly payment but far less interest overall.</p>
+    <div class="table-scroll">
+      <table class="ref" id="compareTable">
+        <thead><tr><th>Term</th><th>Monthly P&amp;I</th><th>Total interest</th><th>Total repaid</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Amortization schedule -->
+<section class="block" id="schedule">
+  <div class="panel">
+    <h2>How the balance falls over time</h2>
+    <p class="lead">In the early years most of your payment is interest. Here's where you stand at each milestone of the loan you entered above.</p>
+    <div class="table-scroll">
+      <table class="ref" id="schedTable">
+        <thead><tr><th>Time</th><th>Paid to date</th><th>Interest so far</th><th>Principal paid</th><th>Balance left</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- AD SLOT 2 — same AdSense responsive unit as above -->
+<div class="adslot"><div class="inner" style="display:none;"></div></div>
+
+<!-- How it works -->
+<section class="block" id="how">
+  <div class="panel">
+    <h2>How the numbers work</h2>
+    <p class="lead">No black box — every figure on this page comes from standard amortization math you can check by hand.</p>
+    <div class="faq" style="border:none;">
+      <div style="padding:8px 0;border-bottom:1px solid var(--line);">
+        <h3 style="font-family:'Inter';font-size:1rem;">Monthly payment (principal &amp; interest)</h3>
+        <p style="color:var(--ink-soft);margin:6px 0 0;font-size:.95rem;">M = P × r(1+r)ⁿ ÷ ((1+r)ⁿ − 1), where P is the amount financed, r is the monthly rate (APR ÷ 12) and n is the number of months. This is the same formula lenders use.</p>
+      </div>
+      <div style="padding:8px 0;border-bottom:1px solid var(--line);">
+        <h3 style="font-family:'Inter';font-size:1rem;">Mortgage: what's financed vs. what you pay</h3>
+        <p style="color:var(--ink-soft);margin:6px 0 0;font-size:.95rem;">Loan amount = home price − down payment. The headline number above adds property tax and insurance (your "escrow"), and PMI when the down payment is below 20%. That total is what most borrowers actually send the bank each month.</p>
+      </div>
+      <div style="padding:8px 0;border-bottom:1px solid var(--line);">
+        <h3 style="font-family:'Inter';font-size:1rem;">Auto loan: tax and trade-in</h3>
+        <p style="color:var(--ink-soft);margin:6px 0 0;font-size:.95rem;">Amount financed = car price + sales tax − down payment − trade-in. Registration and dealer fees aren't included; add them to "car price" if you want them rolled into the loan.</p>
+      </div>
+      <div style="padding:8px 0;">
+        <h3 style="font-family:'Inter';font-size:1rem;">Amortization schedule</h3>
+        <p style="color:var(--ink-soft);margin:6px 0 0;font-size:.95rem;">Each month, interest = balance × monthly rate, and the rest of your payment chips away at principal. Early on the balance is large, so interest eats most of the payment — the milestone table above shows the crossover.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="block faq" id="faq">
+  <div class="panel">
+    <h2>Questions people ask</h2>
+    <details>
+      <summary>What counts as a "good" interest rate right now?</summary>
+      <div class="a">It depends on the loan and your credit. As of 2025–2026, roughly: 30-year mortgages in the mid-6% range, new-car loans around 6–7% for good credit (dealers sometimes advertise lower via incentives), and personal loans anywhere from ~8% to 30%+. Always compare the APR, not just the rate — the APR includes fees.</div>
+    </details>
+    <details>
+      <summary>Why does my mortgage lender quote a higher payment than this?</summary>
+      <div class="a">The quote likely includes escrow items we can't guess exactly — county tax reassessments, higher insurance, HOA dues, or lender-specific PMI tiers. Plug their numbers into the tax/insurance/PMI boxes and the gap usually disappears.</div>
+    </details>
+    <details>
+      <summary>Does paying extra each month actually help?</summary>
+      <div class="a">Yes — every extra dollar goes straight to principal, which shrinks future interest. On a $300k, 30-year loan at 6.8%, an extra $200/month cuts roughly 7 years and tens of thousands of dollars of interest. Add the extra to the "payment" mentally and check the milestone table sooner.</div>
+    </details>
+    <details>
+      <summary>When does PMI go away?</summary>
+      <div class="a">Lenders must automatically cancel it once you hit 80% loan-to-value on the original price, and you can request removal at 80% with a good payment record. If your home has appreciated, a new appraisal can get you there sooner.</div>
+    </details>
+    <details>
+      <summary>Is a 15-year mortgage or a 5-year car loan better?</summary>
+      <div class="a">Shorter terms always cost less in total interest, but the higher monthly payment is real. The usual rule: only take the short term if you'd actually pay it — otherwise a longer term with a bare-minimum payment you never miss beats a "cheap" loan you struggle with.</div>
+    </details>
+    <details>
+      <summary>Is my loan data saved or sent anywhere?</summary>
+      <div class="a">No. Everything runs in your browser with plain JavaScript — the numbers never leave your device and we don't store them. See our privacy policy.</div>
+    </details>
+  </div>
+</section>
+
+<footer>
+  <div>LoanCompass · a simple, free loan &amp; payoff calculator</div>
+  <div style="margin-top:8px;">
+    <a href="about.html">About</a>·<a href="contact.html">Contact</a>·<a href="privacy-policy.html">Privacy Policy</a>
+  </div>
+  <div style="margin-top:10px;opacity:.7;max-width:60ch;margin-left:auto;margin-right:auto;">Estimates are for information only and are not financial or lending advice. Lender quotes and closing disclosures are the authoritative numbers.</div>
+</footer>
+
+<script>
+  const usd = n => '$' + Math.round(n).toLocaleString('en-US');
+  const $ = id => document.getElementById(id);
+
+  const SCEN = {
+    mortgage: {
+      title:'Your home loan', principalLabel:'Home price', defaultPrincipal:350000, defaultRate:6.8,
+      termUnit:'years', terms:[10,15,20,25,30], defaultTerm:30, step:1,
+      showDown:true, showTaxField:false, showMortgageExtras:true, showTrade:false
+    },
+    auto: {
+      title:'Your car loan', principalLabel:'Car price', defaultPrincipal:32000, defaultRate:6.5,
+      termUnit:'months', terms:[24,36,48,60,72], defaultTerm:60, step:6,
+      showDown:true, showTaxField:true, showMortgageExtras:false, showTrade:true
+    },
+    personal: {
+      title:'Your personal loan', principalLabel:'Loan amount', defaultPrincipal:20000, defaultRate:10.5,
+      termUnit:'months', terms:[12,24,36,48,60], defaultTerm:36, step:6,
+      showDown:false, showTaxField:false, showMortgageExtras:false, showTrade:false
+    }
+  };
+  let scenario = 'mortgage';
+
+  function pmt(P, aprPct, nMonths){
+    const r = aprPct/100/12;
+    if(P<=0 || nMonths<=0) return 0;
+    if(r===0) return P/nMonths;
+    return P*r/(1-Math.pow(1+r,-nMonths));
+  }
+  function balanceAfter(P, aprPct, nMonths, k){
+    const r = aprPct/100/12;
+    if(r===0) return Math.max(0, P - pmt(P,aprPct,nMonths)*k);
+    const M = pmt(P, aprPct, nMonths);
+    return P*Math.pow(1+r,k) - M*(Math.pow(1+r,k)-1)/r;
+  }
+
+  function financedAmount(){
+    const p = +$('principal').value||0;
+    if(scenario==='personal') return p;
+    let amt = p - (+$('down').value||0);
+    if(scenario==='auto'){
+      amt += p*((+$('salesTax').value||0)/100);
+      amt -= +$('tradein').value||0;
+    }
+    return Math.max(0, amt);
+  }
+
+  function termMonths(){
+    const t = +$('term').value||0;
+    return scenario==='mortgage' ? t*12 : t;
+  }
+
+  function buildTermChips(){
+    const s = SCEN[scenario];
+    $('termChips').innerHTML = s.terms.map(t=>`<button class="chip" type="button" data-term="${t}">${t} ${s.termUnit==='years'?'yr':'mo'}</button>`).join('');
+  }
+
+  function applyScenario(){
+    const s = SCEN[scenario];
+    $('inputTitle').textContent = s.title;
+    $('principalLabel').textContent = s.principalLabel;
+    $('downField').style.display = s.showDown?'block':'none';
+    $('salesTaxField').style.display = s.showTaxField?'block':'none';
+    $('mortgageExtras').style.display = s.showMortgageExtras?'block':'none';
+    $('tradeField').style.display = s.showTrade?'block':'none';
+    $('termLabel').innerHTML = `Loan term <span class="hint">${s.termUnit}</span>`;
+    $('principal').value = s.defaultPrincipal;
+    $('rate').value = s.defaultRate;
+    $('term').value = s.defaultTerm;
+    $('down').value = scenario==='auto' ? 5000 : 0.2*s.defaultPrincipal;
+    if(scenario==='mortgage') $('salesTax').value = 7;
+    if(scenario==='auto') $('tradein').value = 0;
+    buildTermChips();
+    calc();
+  }
+
+  function calc(){
+    const s = SCEN[scenario];
+    const P = financedAmount();
+    const rate = +$('rate').value||0;
+    const n = termMonths();
+    const M = pmt(P, rate, n);
+    const totalPaid = M*n;
+    const totalInt = totalPaid - P;
+
+    $('loanAmt').textContent = usd(P);
+    $('totInt').textContent = usd(totalInt);
+    $('totPaid').textContent = usd(totalPaid);
+    $('payoff').textContent = n>0 ? (s.termUnit==='years' ? (n/12)+' yrs' : n+' mo') : '—';
+    $('downPctHint').textContent = '(' + (scenario==='personal' ? '—' : ((+$('down').value||0)/(+$('principal').value||1)*100).toFixed(0)+'%') + ')';
+
+    if(scenario==='mortgage'){
+      const price = +$('principal').value||0;
+      const down = +$('down').value||0;
+      const monthlyTax = (+$('taxAnnual').value||0)/12;
+      const monthlyIns = (+$('insAnnual').value||0)/12;
+      const ltv = price ? (P/price*100) : 100;
+      const pmiOn = ltv > 80;
+      const pmi = pmiOn ? P*((+$('pmiRate').value||0)/100)/12 : 0;
+      $('pmiField').style.opacity = pmiOn ? 1 : .45;
+      $('bPi').textContent = usd(M);
+      $('bTax').textContent = usd(monthlyTax);
+      $('bIns').textContent = usd(monthlyIns);
+      $('bPmi').textContent = pmiOn ? usd(pmi) : '$0 (equity ≥20%)';
+      $('bTotal').textContent = usd(M+monthlyTax+monthlyIns+pmi);
+      $('monthly').textContent = usd(M+monthlyTax+monthlyIns+pmi);
+      $('payHead').textContent = 'Monthly payment (PITI)';
+    } else {
+      $('monthly').textContent = usd(M);
+      $('payHead').textContent = 'Monthly payment (P&I)';
+    }
+    $('mortgageBreak').style.display = scenario==='mortgage'?'block':'none';
+
+    buildCompare(P, rate);
+    buildSchedule(P, rate, n);
+  }
+
+  function buildCompare(P, rate){
+    const s = SCEN[scenario];
+    const cur = +$('term').value||0;
+    const tb = $('compareTable').querySelector('tbody');
+    tb.innerHTML = s.terms.map(t=>{
+      const n = s.termUnit==='years' ? t*12 : t;
+      const M = pmt(P, rate, n);
+      const total = M*n;
+      return `<tr class="${t===cur?'hl':''}"><td>${t} ${s.termUnit}</td><td>${usd(M)}</td><td>${usd(total-P)}</td><td>${usd(total)}</td></tr>`;
+    }).join('');
+    $('compareLead').textContent = `Same financed amount (${usd(P)}) at ${rate}% — different ${s.termUnit} lengths. A shorter term usually means a higher monthly payment but far less interest overall.`;
+  }
+
+  function buildSchedule(P, rate, n){
+    const tb = $('schedTable').querySelector('tbody');
+    if(!P || !n){ tb.innerHTML=''; return; }
+    const M = pmt(P, rate, n);
+    const years = n/12;
+    const stepYears = years<=5 ? 1 : years<=10 ? 2 : 5;
+    let rows = [];
+    for(let y=stepYears; y<years; y+=stepYears){
+      rows.push([y, y*12]);
+    }
+    rows.push([Math.round(years*10)/10, n]);
+    tb.innerHTML = rows.map(([y,k])=>{
+      const bal = Math.max(0, balanceAfter(P, rate, n, k));
+      const paid = M*k;
+      const int = paid - (P - bal);
+      return `<tr><td>${y} ${y===1?'year':'years'}</td><td>${usd(paid)}</td><td>${usd(int)}</td><td>${usd(P-bal)}</td><td>${usd(bal)}</td></tr>`;
+    }).join('');
+  }
+
+  document.querySelectorAll('.tab').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      scenario = btn.dataset.scenario;
+      applyScenario();
+    });
+  });
+  $('downChips').addEventListener('click', e=>{
+    if(e.target.dataset.pct){
+      $('down').value = Math.round((+$('principal').value||0)*(+e.target.dataset.pct/100));
+      calc();
+    }
+  });
+  $('termChips').addEventListener('click', e=>{
+    if(e.target.dataset.term){ $('term').value = e.target.dataset.term; calc(); }
+  });
+  ['principal','down','rate','term','taxAnnual','insAnnual','pmiRate','salesTax','tradein'].forEach(id=>$(id).addEventListener('input',calc));
+
+  applyScenario();
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About · LoanCompass Loan Calculator</title>
+<meta name="description" content="Who makes LoanCompass, why we built a free mortgage, auto and personal loan calculator, and how we keep the maths honest.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#0E1A24;--ink-soft:#3C4C58;--paper:#fff;--bg:#F1F4F9;--brand:#1D5BD6;--brand-dark:#164AAE;--brand-tint:#E3ECFB;--line:#D8DFE8;--maxw:820px;}
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;line-height:1.7;}
+  h1,h2,h3{font-family:'Fraunces',serif;margin:0;}
+  a{color:var(--brand);}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+  header{padding:48px 24px 24px;max-width:var(--maxw);margin:0 auto;}
+  header .eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--brand);}
+  header h1{font-size:clamp(2rem,4vw,2.6rem);margin:10px 0 16px;}
+  .back{display:inline-block;margin-bottom:24px;font-size:.88rem;text-decoration:none;}
+  .panel{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:32px;margin-bottom:36px;box-shadow:0 24px 48px -32px rgba(14,26,36,.35);}
+  .panel h2{font-size:1.15rem;margin:24px 0 8px;color:var(--brand-dark);}
+  .panel h2:first-child{margin-top:0;}
+  .panel p{margin:0 0 14px;color:var(--ink-soft);}
+  .panel ul{margin:0 0 14px;padding-left:20px;color:var(--ink-soft);}
+  .panel li{margin-bottom:6px;}
+  footer{text-align:center;padding:32px 24px 60px;color:var(--ink-soft);font-size:.82rem;}
+  footer a{color:var(--brand);margin:0 8px;}
+</style>
+</head>
+<body>
+<header>
+  <a href="index.html" class="back">← Back to calculator</a>
+  <p class="eyebrow">LoanCompass</p>
+  <h1>About LoanCompass</h1>
+</header>
+<div class="wrap">
+  <div class="panel">
+    <h2>What this is</h2>
+    <p>LoanCompass is a free, no-signup loan calculator for the three loans most people actually take out: a mortgage, a car loan, and a personal loan. Enter your numbers and immediately see the monthly payment, total interest, term-by-term comparison and an amortization schedule — with property tax, insurance and PMI built into the mortgage figure. Everything runs in your browser; nothing you enter is stored or sent anywhere.</p>
+
+    <h2>Why we built it</h2>
+    <p>Most loan calculators online are either lead-capture forms for lenders or show a single monthly number with no explanation of where it comes from. We wanted the opposite: one clean page, the amortization maths laid out in plain language, and estimates honest enough that you can compare them line-by-line against a real lender's quote before signing anything.</p>
+
+    <h2>How we keep the maths honest</h2>
+    <ul>
+      <li>Monthly payments use the standard amortization formula every lender uses: M = P × r(1+r)ⁿ ÷ ((1+r)ⁿ − 1).</li>
+      <li>The mortgage figure defaults to a real-world PITI payment — principal, interest, property tax, homeowners insurance, and PMI whenever the down payment is under 20%.</li>
+      <li>Auto loans account for sales tax and trade-in value, because the sticker price is rarely what you actually finance.</li>
+      <li>Because real loans vary with fees, escrow changes and credit-based PMI rates, every estimate is clearly labelled as approximate — and the "How the numbers work" section spells out every assumption.</li>
+    </ul>
+
+    <h2>What it isn't</h2>
+    <p>LoanCompass is <strong>not</strong> a lender, mortgage broker, or financial advisor, and it is not affiliated with any bank or government agency. The figures are educational estimates, not loan quotes or financial advice. For anything you'd sign or act on, rely on your lender's official quote and closing disclosure, or a qualified professional.</p>
+
+    <h2>Free and private</h2>
+    <p>The tool is completely free and runs entirely in your browser — no account, and no tracking of what you enter. Your loan amounts, rates and income details never leave your device.</p>
+  </div>
+</div>
+<footer>
+  <div><a href="index.html">Calculator</a>·<a href="about.html">About</a>·<a href="contact.html">Contact</a>·<a href="privacy-policy.html">Privacy Policy</a></div>
+  <div style="margin-top:6px;opacity:.7;">LoanCompass · Free loan &amp; payoff calculator · 2026</div>
+</footer>
+</body>
+</html>
